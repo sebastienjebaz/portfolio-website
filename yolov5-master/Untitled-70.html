@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tamil Nadu District Education Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    #map-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 20px auto;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+    }
+    path.district {
+      fill: #cce5ff;
+      stroke: #333;
+      stroke-width: 1;
+      cursor: pointer;
+      transition: fill 0.3s;
+    }
+    path.district:hover {
+      fill: #99ccff;
+    }
+    #info-box {
+      margin: 20px auto;
+      padding: 15px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      display: none;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tamil Nadu District Education Map</h1>
+  <p>Click a district to view the number of schools and colleges.</p>
+
+  <div id="map-container">
+    <!-- Simplified SVG Map -->
+    <svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+      <path id="Chennai" class="district" d="M50,50 L100,50 L100,100 L50,100 Z" />
+      <path id="Madurai" class="district" d="M150,200 L200,200 L200,250 L150,250 Z" />
+      <path id="Coimbatore" class="district" d="M100,300 L150,300 L150,350 L100,350 Z" />
+      <!-- Replace with full district paths from your SVG -->
+    </svg>
+  </div>
+
+  <div id="info-box"></div>
+
+  <script>
+    // Sample data for 3 districts. Replace or expand with full data/API fetch.
+    const districtData = {
+      "Chennai": { schools: 1250, colleges: 180 },
+      "Madurai": { schools: 950, colleges: 120 },
+      "Coimbatore": { schools: 1100, colleges: 160 },
+      // Add all 32 districts here
+    };
+
+    // Function to handle district click
+    function showDistrictInfo(districtId) {
+      const data = districtData[districtId];
+      const infoBox = document.getElementById("info-box");
+
+      if (data) {
+        infoBox.innerHTML = `
+          <h2>${districtId}</h2>
+          <p><strong>Schools:</strong> ${data.schools}</p>
+          <p><strong>Colleges:</strong> ${data.colleges}</p>
+        `;
+      } else {
+        infoBox.innerHTML = `<h2>${districtId}</h2><p>No data available.</p>`;
+      }
+
+      infoBox.style.display = "block";
+    }
+
+    // Attach event listeners
+    document.querySelectorAll("path.district").forEach(path => {
+      path.addEventListener("click", () => {
+        showDistrictInfo(path.id);
+      });
+    });
+
+    // Optional: Hide info box on outside click
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("path.district") && !e.target.closest("#info-box")) {
+        document.getElementById("info-box").style.display = "none";
+      }
+    });
+  </script>
+
+</body>
+</html>

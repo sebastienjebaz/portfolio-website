@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tamil Nadu Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <style>
+    body { font-family: Arial; background: #f2f2f2; margin: 0; padding: 0; }
+    #map { height: 500px; }
+    .container { padding: 20px; max-width: 800px; margin: auto; }
+    select, label { font-size: 16px; margin-top: 10px; display: block; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🗺 Tamil Nadu Map Explorer</h2>
+
+  <label for="category">Choose a category:</label>
+  <select id="category" onchange="showMarkers(this.value)">
+    <option value="">-- Select --</option>
+    <option value="schools">Schools</option>
+    <option value="colleges">Colleges</option>
+    <option value="tourism">Tourism</option>
+  </select>
+
+  <div id="map"></div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+  const map = L.map('map').setView([11.1271, 78.6569], 7); // Tamil Nadu center
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const locations = {
+    schools: [
+      { name: "Good Shepherd School", lat: 11.4064, lng: 76.6932 },
+      { name: "Hebron School", lat: 11.4096, lng: 76.7080 }
+    ],
+    colleges: [
+      { name: "Government Arts College", lat: 11.4063, lng: 76.6935 },
+      { name: "JSS College of Pharmacy", lat: 11.4102, lng: 76.7072 }
+    ],
+    tourism: [
+      { name: "Ooty Lake", lat: 11.4038, lng: 76.6939 },
+      { name: "Doddabetta Peak", lat: 11.4154, lng: 76.7357 }
+    ]
+  };
+
+  let currentMarkers = [];
+
+  function showMarkers(category) {
+    // Clear previous markers
+    currentMarkers.forEach(marker => map.removeLayer(marker));
+    currentMarkers = [];
+
+    if (!category || !locations[category]) return;
+
+    locations[category].forEach(loc => {
+      const marker = L.marker([loc.lat, loc.lng])
+        .addTo(map)
+        .bindPopup(<strong>${loc.name}</strong>);
+      currentMarkers.push(marker);
+    });
+
+    if (locations[category].length > 0) {
+      const bounds = L.latLngBounds(locations[category].map(loc => [loc.lat, loc.lng]));
+      map.fitBounds(bounds);
+    }
+  }
+</script>
+
+</body>
+</

@@ -1,0 +1,30 @@
+<!-- In <svg> -->
+<path id="Chennai" class="district" d="M…Z" onclick="showDistrict('Chennai')" />
+<path id="Madurai" class="district" d="M…Z" onclick="showDistrict('Madurai')" />
+<!-- Add paths for all 32 districts -->
+
+<!-- Info panel -->
+<div id="district-info"><h3>Select a district</h3></div>
+const districtData = {
+  'Chennai': { schools: 1200, colleges: 250, links: { schools:'…', colleges:'…' } },
+  'Madurai':  { schools: 800,  colleges: 120, links: { schools:'…', colleges:'…' } },
+  // … all other districts …
+  'Tirunelveli': { schools: 2494, colleges: 25, links: { schools:'…', colleges:'…' } },
+  'Tenkasi':    { schools: 1292, colleges: 0, links: { schools:'…', colleges:'…' } },
+};
+function showDistrict(district) {
+  const info = districtData[district];
+  const panel = document.getElementById('district-info');
+  if (info) {
+    panel.innerHTML = `
+      <h3>${district} District</h3>
+      <p><strong>Schools:</strong> ${info.schools} 
+         ${info.links.schools ? `(<a href="${info.links.schools}" target="_blank">Details</a>)` : ''}
+      </p>
+      <p><strong>Colleges:</strong> ${info.colleges} 
+         ${info.links.colleges ? `(<a href="${info.links.colleges}" target="_blank">Details</a>)` : ''}
+      </p>`;
+  } else {
+    panel.innerHTML = `<h3>No data available for ${district}</h3>`;
+  }
+}

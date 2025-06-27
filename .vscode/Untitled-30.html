@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tamil Nadu Districts Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    #info-box {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tamil Nadu District Map</h1>
+  <p>Click on a district to see the number of schools and colleges.</p>
+
+  <img src="635996cd-a2cd-4984-add7-2f7ef7d8bbd9.png" usemap="#tamilnadu-map" alt="Tamil Nadu Map" id="mapImage">
+
+  <map name="tamilnadu-map">
+    <!-- Example clickable areas (rough positions) -->
+    <area shape="rect" coords="500,50,550,100" alt="Chennai" onclick="showInfo('Chennai')">
+    <area shape="rect" coords="250,500,300,550" alt="Madurai" onclick="showInfo('Madurai')">
+    <area shape="rect" coords="100,700,150,750" alt="Coimbatore" onclick="showInfo('Coimbatore')">
+    <area shape="rect" coords="400,800,450,850" alt="Tirunelveli" onclick="showInfo('Tirunelveli')">
+  </map>
+
+  <div id="info-box"></div>
+
+  <script>
+    const data = {
+      "Chennai": { schools: 1250, colleges: 180 },
+      "Madurai": { schools: 950, colleges: 120 },
+      "Coimbatore": { schools: 1100, colleges: 160 },
+      "Tirunelveli": { schools: 800, colleges: 90 },
+    };
+
+    function showInfo(district) {
+      const info = data[district];
+      if (info) {
+        document.getElementById("info-box").innerHTML =
+          `<h2>${district}</h2>
+          <p>Schools: ${info.schools}</p>
+          <p>Colleges: ${info.colleges}</p>`;
+      } else {
+        document.getElementById("info-box").innerHTML =
+          `<h2>${district}</h2><p>Data not available</p>`;
+      }
+    }
+  </script>
+
+</body>
+</html>

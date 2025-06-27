@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tamil Nadu District Education Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; }
+    #map-container { width: 100%; max-width: 800px; margin: auto; }
+    svg { width: 100%; height: auto; }
+    path.district { fill: #ddd; stroke: #fff; cursor: pointer; transition: fill 0.2s; }
+    path.district:hover { fill: #bbb; }
+    #info-box {
+      position: fixed;
+      top: 10%; right: 10%;
+      background: white;
+      border: 1px solid #333;
+      padding: 15px;
+      display: none;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map-container">
+  <!-- Paste your SVG content here -->
+  <!-- Example: -->
+  <!-- <svg viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg">
+       <path id="Chennai" class="district" d="M10,20 L50,20..." />
+       <path id="Coimbatore" class="district" d="M..."/>
+       <!-- ...other districts -->
+  <!-- </svg> -->
+</div>
+
+<div id="info-box"></div>
+
+<script>
+  async function loadData() {
+    const res = await fetch('/data/district_counts.json');
+    return res.json();
+  }
+
+  function makeInteractive(districtData) {
+    document.querySelectorAll('path.district').forEach(el => {
+      const name = el.id; // Make sure SVG `id` matches JSON keys
+      const info = districtData[name];
+
+      el.addEventListener('mouseenter', () => {
+        el.style.fill = '#999';
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.fill = '';
+      });
+      el.addEventListener('click', () => {
+        const box = document.getElementById('info-box');
+        if (info) {
+          box.innerHTML = `
+            <h2>${name}</h2>
+            <p><strong>Schools:</strong> ${info.schools}</p>
+            <p><strong>Colleges:</strong> ${info.colleges}</p>
+          `;
+        } else {
+          box.innerHTML = `<h2>${name}</h2><p>No data available.</p>`;
+        }
+        box.style.display = 'block';
+      });
+    });
+
+    // Hide info-box on clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('path.district')) {
+        document.getElementById('info-box').style.display = 'none';
+      }
+    });
+  }
+
+  // Initialize
+  loadData().then(data => makeInteractive(data)).catch(console.error);
+</script>
+
+</body>
+</html>
